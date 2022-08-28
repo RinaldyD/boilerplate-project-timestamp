@@ -4,6 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
+var os = require("os");
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -29,7 +30,7 @@ app.get("/api/", (req, res) => {
   res.json({ unix: date.valueOf(), utc: date.toUTCString() });
 });
 
-app.get("/api/:value", (req, res) => {
+app.get("/api/timestamp/:value", (req, res) => {
   let timestamp = req.params.value;
   if (timestamp.match(/\d{5,}/)) {
     timestamp = +timestamp;
@@ -42,6 +43,9 @@ app.get("/api/:value", (req, res) => {
   res.json({ unix: date.valueOf(), utc: date.toUTCString() });
 });
 
+app.get("/api/whoami", (req, res) => {
+  res.json({ ipaddress: req.connection.remoteAddress, language: req.headers['accept-language'], software: req.headers['user-agent'] });
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
